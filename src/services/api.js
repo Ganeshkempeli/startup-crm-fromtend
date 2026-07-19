@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
-// Resolve backend api url. Default fallback to port 5000 in development.
-const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+// Resolve backend api url. Force correct production URL in production mode, fallback to dev values in dev mode.
+const baseURL = import.meta.env.DEV 
+  ? (import.meta.env.VITE_API_URL || 'http://localhost:5000')
+  : 'https://startup-crm-backtend-production.up.railway.app';
 
 const api = axios.create({
   baseURL,
