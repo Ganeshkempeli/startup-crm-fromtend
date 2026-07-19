@@ -41,10 +41,15 @@ api.interceptors.response.use(
     }
 
     // 2. Handle Network connection errors
+    // Suppress global toast on auth pages — they show inline error messages themselves
     if (!error.response) {
-      toast.error('Cannot connect to server. Check your connection.', {
-        id: 'network-connection-error', // Prevent duplicate toast instances
-      });
+      const currentPath = window.location.pathname;
+      const isAuthPage = currentPath === '/login' || currentPath === '/register';
+      if (!isAuthPage) {
+        toast.error('Cannot connect to server. Check your connection.', {
+          id: 'network-connection-error', // Prevent duplicate toast instances
+        });
+      }
     }
 
     return Promise.reject(error);

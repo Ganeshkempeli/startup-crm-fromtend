@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { User, Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
+import { User, Mail, Lock, Loader2, ArrowRight, Zap, ShieldCheck } from 'lucide-react';
+import './auth.css';
 
 /**
  * Register Page component.
@@ -57,159 +58,154 @@ export const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-colors duration-300">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <h2 className="mt-6 text-3xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">
-          Create your account
-        </h2>
-        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+    <div className="auth-page">
+      <div className="auth-card">
+
+        {/* Brand */}
+        <div className="auth-brand">
+          <div className="auth-brand-icon">
+            <Zap size={20} />
+          </div>
+          <span className="auth-brand-name">CRM Lite</span>
+        </div>
+
+        {/* Heading */}
+        <h1 className="auth-title">Create your account</h1>
+        <p className="auth-subtitle">
           Already have an account?{' '}
-          <Link
-            to="/login"
-            className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
-          >
-            Sign in here
-          </Link>
+          <Link to="/login">Sign in here</Link>
         </p>
-      </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white dark:bg-slate-900 py-8 px-4 border border-slate-200 dark:border-slate-800 shadow-sm sm:rounded-xl sm:px-10 transition-all duration-300">
-          
-          {/* Error Banner */}
-          {errorMessage && (
-            <div className="mb-4 p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 rounded-lg text-sm text-red-600 dark:text-red-400 flex items-center gap-2 animate-shake">
-              <span className="font-semibold">Error:</span> {errorMessage}
-            </div>
-          )}
+        {/* Error Banner */}
+        {errorMessage && (
+          <div className="auth-error" role="alert">
+            <svg className="auth-error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <p className="auth-error-text">
+              <strong>Error: </strong>{errorMessage}
+            </p>
+          </div>
+        )}
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            
-            {/* Full Name */}
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-semibold text-slate-700 dark:text-slate-350"
-              >
-                Full Name
-              </label>
-              <div className="mt-1 relative rounded-md shadow-xs">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                  <User size={16} />
-                </div>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="John Doe"
-                  className="block w-full pl-10 pr-3 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-450 dark:placeholder-slate-500 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
-                  disabled={isSubmitting}
-                />
-              </div>
-            </div>
+        {/* Form */}
+        <form className="auth-form" onSubmit={handleSubmit} noValidate>
 
-            {/* Email Address */}
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-semibold text-slate-700 dark:text-slate-350"
-              >
-                Email Address
-              </label>
-              <div className="mt-1 relative rounded-md shadow-xs">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                  <Mail size={16} />
-                </div>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@company.com"
-                  className="block w-full pl-10 pr-3 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-450 dark:placeholder-slate-500 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
-                  disabled={isSubmitting}
-                />
-              </div>
-            </div>
-
-            {/* Password */}
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-semibold text-slate-700 dark:text-slate-350"
-              >
-                Password (min. 6 characters)
-              </label>
-              <div className="mt-1 relative rounded-md shadow-xs">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                  <Lock size={16} />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="block w-full pl-10 pr-3 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-450 dark:placeholder-slate-500 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
-                  disabled={isSubmitting}
-                />
-              </div>
-            </div>
-
-            {/* Confirm Password */}
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-semibold text-slate-700 dark:text-slate-350"
-              >
-                Confirm Password
-              </label>
-              <div className="mt-1 relative rounded-md shadow-xs">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                  <Lock size={16} />
-                </div>
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  required
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="block w-full pl-10 pr-3 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-450 dark:placeholder-slate-500 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
-                  disabled={isSubmitting}
-                />
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <div>
-              <button
-                type="submit"
+          {/* Full Name */}
+          <div className="auth-field">
+            <label htmlFor="name" className="auth-label">Full Name</label>
+            <div className="auth-input-wrap">
+              <span className="auth-input-icon">
+                <User size={16} />
+              </span>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="John Doe"
+                className="auth-input"
                 disabled={isSubmitting}
-                className="w-full flex justify-center items-center gap-2 py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 size={16} className="animate-spin" />
-                    Creating account...
-                  </>
-                ) : (
-                  <>
-                    Register
-                    <ArrowRight size={16} />
-                  </>
-                )}
-              </button>
+                autoComplete="name"
+              />
             </div>
-          </form>
+          </div>
+
+          {/* Email Address */}
+          <div className="auth-field">
+            <label htmlFor="email" className="auth-label">Email Address</label>
+            <div className="auth-input-wrap">
+              <span className="auth-input-icon">
+                <Mail size={16} />
+              </span>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="name@company.com"
+                className="auth-input"
+                disabled={isSubmitting}
+                autoComplete="email"
+              />
+            </div>
+          </div>
+
+          {/* Password */}
+          <div className="auth-field">
+            <label htmlFor="password" className="auth-label">Password (min. 6 characters)</label>
+            <div className="auth-input-wrap">
+              <span className="auth-input-icon">
+                <Lock size={16} />
+              </span>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="auth-input"
+                disabled={isSubmitting}
+                autoComplete="new-password"
+              />
+            </div>
+          </div>
+
+          {/* Confirm Password */}
+          <div className="auth-field">
+            <label htmlFor="confirmPassword" className="auth-label">Confirm Password</label>
+            <div className="auth-input-wrap">
+              <span className="auth-input-icon">
+                <Lock size={16} />
+              </span>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="••••••••"
+                className="auth-input"
+                disabled={isSubmitting}
+                autoComplete="new-password"
+              />
+            </div>
+          </div>
+
+          {/* Submit */}
+          <button
+            type="submit"
+            id="register-submit-btn"
+            disabled={isSubmitting}
+            className="auth-btn"
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 size={16} className="auth-spinner" />
+                Creating account…
+              </>
+            ) : (
+              <>
+                Create Account
+                <ArrowRight size={16} />
+              </>
+            )}
+          </button>
+        </form>
+
+        {/* Security note */}
+        <div className="auth-footer-note">
+          <ShieldCheck size={13} />
+          Secured with JWT encryption
         </div>
       </div>
     </div>
