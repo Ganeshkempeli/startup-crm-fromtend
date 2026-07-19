@@ -9,6 +9,7 @@ import {
    Sparkles
  } from 'lucide-react';
 import DarkModeToggle from '../common/DarkModeToggle';
+import { useAuth } from '../../context/AuthContext';
 import './Sidebar.css';
  
  /**
@@ -18,9 +19,17 @@ import './Sidebar.css';
   */
  export const Sidebar = () => {
    const [isOpen, setIsOpen] = useState(false);
+   const { user } = useAuth();
  
    const toggleSidebar = () => {
      setIsOpen(!isOpen);
+   };
+
+   const getInitials = (name) => {
+     if (!name) return 'U';
+     const parts = name.trim().split(/\s+/);
+     if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+     return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
    };
  
    return (
@@ -84,10 +93,10 @@ import './Sidebar.css';
            </div>
            
            <div className="user-profile-badge">
-             <div className="user-avatar">JD</div>
+             <div className="user-avatar">{getInitials(user?.name)}</div>
              <div className="user-info">
-               <span className="user-name">John Doe</span>
-               <span className="user-role">Sales Admin</span>
+               <span className="user-name">{user?.name || 'User'}</span>
+               <span className="user-role">{user?.role === 'admin' ? 'Sales Admin' : 'Sales Representative'}</span>
              </div>
            </div>
          </div>

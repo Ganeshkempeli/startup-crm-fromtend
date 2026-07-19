@@ -1,12 +1,28 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Bell, Search, ChevronRight, User, Settings, LogOut } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import './Header.css';
 
 export const Header = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    setShowProfileMenu(false);
+    logout();
+    navigate('/login', { replace: true });
+  };
+
+  const getInitials = (name) => {
+    if (!name) return 'U';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+  };
 
   // Map path to breadcrumbs
   const getBreadcrumbs = () => {
@@ -87,14 +103,14 @@ export const Header = () => {
             onClick={() => setShowProfileMenu(!showProfileMenu)}
             aria-label="User profile menu"
           >
-            JD
+            {getInitials(user?.name)}
           </button>
 
           {showProfileMenu && (
             <div className="profile-dropdown card">
               <div className="dropdown-user-info">
-                <span className="font-semibold text-primary">John Doe</span>
-                <span className="text-small">john.doe@company.com</span>
+                <span className="font-semibold text-primary">{user?.name || 'User'}</span>
+                <span className="text-small">{user?.email || ''}</span>
               </div>
               <div className="dropdown-divider"></div>
               <button type="button" className="dropdown-item">
@@ -106,7 +122,11 @@ export const Header = () => {
                 <span>Settings</span>
               </button>
               <div className="dropdown-divider"></div>
-              <button type="button" className="dropdown-item text-error">
+              <button 
+                type="button" 
+                className="dropdown-item text-error"
+                onClick={handleLogout}
+              >
                 <LogOut size={14} />
                 <span>Log Out</span>
               </button>

@@ -101,9 +101,6 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     setUser(null);
     toast.success('Logged out successfully.');
-    
-    // Redirect cleanly to login route
-    window.location.href = '/login';
   };
 
   return (
