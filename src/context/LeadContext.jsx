@@ -25,12 +25,12 @@ export const LeadProvider = ({ children }) => {
    */
   const fetchLeads = async (params = {}) => {
     if (!token) return;
-    
+
     setIsLoading(true);
     try {
       const queryParams = { limit: 1000, ...params };
       const response = await leadService.getLeads(queryParams);
-      
+
       setLeads(response.data || []);
       setPagination(response.pagination || { total: 0, page: 1, limit: 1000, pages: 1 });
     } catch (error) {
