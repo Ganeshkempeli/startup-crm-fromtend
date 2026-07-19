@@ -50,7 +50,12 @@ export const Register = () => {
       // Redirection to main CRM board
       navigate('/');
     } catch (error) {
-      const message = error.response?.data?.message || 'Registration failed. Please try again.';
+      const responseData = error.response?.data;
+      // Backend can return either a top-level 'message' or a validation 'errors' array
+      const message =
+        responseData?.message ||
+        responseData?.errors?.[0]?.message ||
+        'Registration failed. Please try again.';
       setErrorMessage(message);
     } finally {
       setIsSubmitting(false);

@@ -40,7 +40,12 @@ export const Login = () => {
       navigate('/');
     } catch (error) {
       // Extract custom error message from axios response
-      const message = error.response?.data?.message || 'Login failed. Please check your credentials.';
+      // Backend may return a top-level 'message' or a validation 'errors' array
+      const responseData = error.response?.data;
+      const message =
+        responseData?.message ||
+        responseData?.errors?.[0]?.message ||
+        'Login failed. Please check your credentials.';
       setErrorMessage(message);
     } finally {
       setIsSubmitting(false);
